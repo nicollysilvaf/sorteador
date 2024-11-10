@@ -9,8 +9,14 @@ function sortear() {
     // Exibe os números sorteados
     exibirResultado(sorteados);
 
+    // Exibe uma mensagem de sucesso
+    exibirMensagem('Sorteio realizado com sucesso!');
+
     // Atualiza o estado do botão de reiniciar
     alterarStatusBotao();
+
+    // Salva o sorteio no histórico
+    salvarHistorico(sorteados);
 }
 
 // Função que obtém e valida os valores de entrada
@@ -18,7 +24,7 @@ function obterValoresEntradas() {
     let quantidade = parseInt(document.getElementById('quantidade').value);
     let de = parseInt(document.getElementById('de').value);
     let ate = parseInt(document.getElementById('ate').value);
-    
+
     // Valida os valores inseridos
     if (isNaN(de) || isNaN(ate) || isNaN(quantidade) || quantidade < 1) {
         exibirMensagem('Por favor, insira valores válidos e quantidade maior que zero.');
@@ -69,6 +75,18 @@ function alterarStatusBotao() {
     botao.classList.toggle('container__botao-desabilitado');
 }
 
+// Função para desabilitar o botão "Sortear" quando a quantidade for 0 ou inválida
+function desabilitarBotaoSortear() {
+    let botao = document.getElementById('btn-sortear');
+    let quantidade = parseInt(document.getElementById('quantidade').value);
+    
+    if (quantidade < 1 || isNaN(quantidade)) {
+        botao.disabled = true;  // Desabilita o botão de sorteio
+    } else {
+        botao.disabled = false;  // Habilita o botão de sorteio
+    }
+}
+
 // Função que exibe mensagens de erro ou informação
 function exibirMensagem(mensagem) {
     let mensagemElemento = document.getElementById('mensagem');
@@ -94,3 +112,22 @@ function limparCampos(...ids) {
         document.getElementById(id).value = ''; // Limpa cada campo especificado
     });
 }
+
+// Função para salvar o histórico de sorteios
+function salvarHistorico(sorteados) {
+    let historico = JSON.parse(localStorage.getItem('historico')) || []; // Obtém o histórico do localStorage
+    historico.push(sorteados); // Adiciona os números sorteados no histórico
+    localStorage.setItem('historico', JSON.stringify(historico)); // Salva o histórico no localStorage
+}
+
+// Função para exibir o histórico de sorteios
+function exibirHistorico() {
+    let historico = JSON.parse(localStorage.getItem('historico')) || [];
+    let resultado = document.getElementById('historico');
+    resultado.innerHTML = historico.map((sorteios, index) => {
+        return `<p>Sorteio ${index + 1}: ${sorteios.join(', ')}</p>`;
+    }).join('');
+}
+
+// Adiciona evento para exibir histórico ao clicar no botão
+document.getElementById('btn-exibir-historico').addEventListener('click', exibirHistorico);
