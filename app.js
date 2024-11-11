@@ -1,18 +1,14 @@
 // Função principal que realiza o sorteio de números
 function sortear() {
-    let { quantidade, de, ate } = obterValoresEntradas();
+    const { quantidade, de, ate } = obterValoresEntradas();
     if (!quantidade) return; // Interrompe a execução em caso de erro
 
-    // Gera os números sorteados
-    let sorteados = gerarNumerosSorteados(quantidade, de, ate);
+    // Gera e exibe os números sorteados
+    const sorteados = gerarNumerosSorteados(quantidade, de, ate);
+    exibirResultadoModal(sorteados);
 
-    // Exibe os números sorteados
-    exibirResultadoModal(sorteados); // Altere para exibir no modal
-
-    // Exibe uma mensagem de sucesso
+    // Exibe mensagem de sucesso e atualiza o estado do botão de reiniciar
     exibirMensagem('Sorteio realizado com sucesso!');
-
-    // Atualiza o estado do botão de reiniciar
     alterarStatusBotao();
 
     // Salva o sorteio no histórico
@@ -25,115 +21,90 @@ function obterValoresEntradas() {
     let de = parseInt(document.getElementById('de').value);
     let ate = parseInt(document.getElementById('ate').value);
 
-    // Valida os valores inseridos
     if (isNaN(de) || isNaN(ate) || isNaN(quantidade) || quantidade < 1) {
-        exibirMensagem('Por favor, insira valores válidos e quantidade maior que zero.');
-        return {}; // Retorna objeto vazio em caso de erro
+        return exibirMensagem('Por favor, insira valores válidos e quantidade maior que zero.') || {};
     }
 
-    if (de >= ate) {
-        exibirMensagem('Campo "Do número" deve ser inferior ao campo "Até o número". Verifique!');
-        return {}; // Retorna objeto vazio em caso de erro
-    }
-
-    if (quantidade > (ate - de + 1)) {
-        exibirMensagem('Campo "Quantidade" deve ser menor ou igual ao intervalo informado.');
-        return {}; // Retorna objeto vazio em caso de erro
-    }
+    if (de >= ate) return exibirMensagem('Campo "Do número" deve ser inferior ao campo "Até o número". Verifique!') || {};
+    if (quantidade > (ate - de + 1)) return exibirMensagem('Campo "Quantidade" deve ser menor ou igual ao intervalo informado.') || {};
 
     return { quantidade, de, ate };
 }
 
 // Função que gera números sorteados únicos
 function gerarNumerosSorteados(quantidade, de, ate) {
-    let sorteados = [];
-    
-    // Loop para gerar números aleatórios até que a quantidade desejada seja atingida
-    while (sorteados.length < quantidade) {
-        let numero = obterNumeroAleatorio(de, ate);
-        if (!sorteados.includes(numero)) sorteados.push(numero); // Adiciona número único ao array
+    const sorteados = new Set();
+    while (sorteados.size < quantidade) {
+        sorteados.add(obterNumeroAleatorio(de, ate));
     }
-
-    return sorteados;
+    return [...sorteados]; // Converte o Set de volta para um array
 }
 
 // Função que gera um número aleatório entre um mínimo e um máximo
 function obterNumeroAleatorio(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min; // Gera número aleatório
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Função para exibir os números sorteados no Modal
 function exibirResultadoModal(sorteados) {
-    let modal = document.getElementById('modalResultado');
-    let modalConteudo = document.getElementById('modalConteudo');
+    const modal = document.getElementById('modalResultado');
+    const modalConteudo = document.getElementById('modalConteudo');
     modalConteudo.innerHTML = `Números sorteados: <strong>${sorteados.join(', ')}</strong>`;
     modal.style.display = 'block'; // Exibe o modal
 }
 
-// Função que fecha o modal
+// Função para fechar o modal
 function fecharModal() {
     document.getElementById('modalResultado').style.display = 'none';
 }
 
-// Função que altera o estado do botão de reiniciar (habilita/desabilita)
+// Função para alterar o estado do botão de reiniciar (habilita/desabilita)
 function alterarStatusBotao() {
-    let botao = document.getElementById('btn-reiniciar');
+    const botao = document.getElementById('btn-reiniciar');
     botao.classList.toggle('container__botao');
     botao.classList.toggle('container__botao-desabilitado');
 }
 
 // Função para desabilitar o botão "Sortear" quando a quantidade for 0 ou inválida
 function desabilitarBotaoSortear() {
-    let botao = document.getElementById('btn-sortear');
-    let quantidade = parseInt(document.getElementById('quantidade').value);
-    
-    if (quantidade < 1 || isNaN(quantidade)) {
-        botao.disabled = true;  // Desabilita o botão de sorteio
-    } else {
-        botao.disabled = false;  // Habilita o botão de sorteio
-    }
+    const botao = document.getElementById('btn-sortear');
+    const quantidade = parseInt(document.getElementById('quantidade').value);
+    botao.disabled = isNaN(quantidade) || quantidade < 1;
 }
 
-// Função que exibe mensagens de erro ou informação
+// Função para exibir mensagens de erro ou informação
 function exibirMensagem(mensagem) {
-    let mensagemElemento = document.getElementById('mensagem');
+    const mensagemElemento = document.getElementById('mensagem');
     mensagemElemento.innerHTML = mensagem;
     setTimeout(() => mensagemElemento.innerHTML = '', 3000); // Limpa a mensagem após 3 segundos
 }
 
 // Função para reiniciar os campos e resultados
 function reiniciar() {
-    // Limpa os campos de entrada
     limparCampos('quantidade', 'de', 'ate');
-    
-    // Reseta o resultado para uma mensagem padrão
     document.getElementById('resultado').innerHTML = '<label class="texto__paragrafo">Números sorteados: nenhum até agora</label>';
-    
-    // Atualiza o estado do botão de reiniciar
     alterarStatusBotao();
 }
 
 // Função genérica para limpar campos
 function limparCampos(...ids) {
-    ids.forEach(id => {
-        document.getElementById(id).value = ''; // Limpa cada campo especificado
-    });
+    ids.forEach(id => document.getElementById(id).value = ''); // Limpa cada campo especificado
 }
 
 // Função para salvar o histórico de sorteios
 function salvarHistorico(sorteados) {
-    let historico = JSON.parse(localStorage.getItem('historico')) || []; // Obtém o histórico do localStorage
-    historico.push(sorteados); // Adiciona os números sorteados no histórico
-    localStorage.setItem('historico', JSON.stringify(historico)); // Salva o histórico no localStorage
+    const historico = JSON.parse(localStorage.getItem('historico')) || [];
+    historico.push(sorteados);
+    localStorage.setItem('historico', JSON.stringify(historico));
 }
 
 // Função para exibir o histórico de sorteios
 function exibirHistorico() {
-    let historico = JSON.parse(localStorage.getItem('historico')) || [];
-    let resultado = document.getElementById('historico');
-    resultado.innerHTML = historico.map((sorteios, index) => {
-        return `<p>Sorteio ${index + 1}: ${sorteios.join(', ')}</p>`;
-    }).join('');
+    const historico = JSON.parse(localStorage.getItem('historico')) || [];
+    const resultado = document.getElementById('historico');
+    resultado.innerHTML = historico.map((sorteios, index) => 
+        `<p>Sorteio ${index + 1}: ${sorteios.join(', ')}</p>`
+    ).join('');
 }
 
 // Função para excluir o histórico de sorteios
@@ -146,14 +117,14 @@ function excluirHistorico() {
 
 // Função para exportar o histórico para CSV
 function exportarHistoricoCSV() {
-    let historico = JSON.parse(localStorage.getItem('historico')) || [];
+    const historico = JSON.parse(localStorage.getItem('historico')) || [];
     let csvContent = 'Sorteio, Números Sorteados\n';
     historico.forEach((sorteio, index) => {
         csvContent += `${index + 1}, ${sorteio.join(', ')}\n`;
     });
 
-    let blob = new Blob([csvContent], { type: 'text/csv' });
-    let link = document.createElement('a');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'historico_sorteios.csv';
     link.click();
@@ -162,9 +133,7 @@ function exportarHistoricoCSV() {
 // Função para iniciar sorteio automático
 let intervaloSorteio;
 function iniciarSorteioAutomatico() {
-    intervaloSorteio = setInterval(() => {
-        sortear(); // Realiza o sorteio
-    }, 2000); // Sorteia a cada 2 segundos
+    intervaloSorteio = setInterval(sortear, 2000); // Sorteia a cada 2 segundos
 }
 
 // Função para parar o sorteio automático
@@ -172,23 +141,13 @@ function pararSorteioAutomatico() {
     clearInterval(intervaloSorteio);
 }
 
-// Adiciona evento para exibir histórico ao clicar no botão
+// Adiciona eventos para as interações
 document.getElementById('btn-exibir-historico').addEventListener('click', exibirHistorico);
-
-// Adiciona evento para exportar histórico ao clicar no botão
 document.getElementById('btn-exportar-historico').addEventListener('click', exportarHistoricoCSV);
-
-// Adiciona evento para excluir o histórico ao clicar no botão
 document.getElementById('btn-excluir-historico').addEventListener('click', excluirHistorico);
-
-// Adiciona eventos para validar e desabilitar o botão sortear enquanto o usuário digita
 document.getElementById('quantidade').addEventListener('input', desabilitarBotaoSortear);
 document.getElementById('de').addEventListener('input', desabilitarBotaoSortear);
 document.getElementById('ate').addEventListener('input', desabilitarBotaoSortear);
-
-// Adiciona eventos para iniciar e parar o sorteio automático
 document.getElementById('btn-iniciar-sorteio').addEventListener('click', iniciarSorteioAutomatico);
 document.getElementById('btn-parar-sorteio').addEventListener('click', pararSorteioAutomatico);
-
-// Função para fechar o modal
 document.getElementById('btn-fechar-modal').addEventListener('click', fecharModal);
