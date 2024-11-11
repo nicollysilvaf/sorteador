@@ -160,70 +160,6 @@ button:disabled {
 
 /* --- Novas Regras de Estilo --- */
 
-/* Modal de Resultados */
-.modal {
-    display: none; /* Esconde o modal por padrão */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
-    z-index: 2; /* Fica acima de outros elementos */
-    align-items: center;
-    justify-content: center;
-    overflow: auto; /* Garante que o conteúdo não ultrapasse os limites do modal */
-}
-
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    margin: 10% auto;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-    border-radius: 16px;
-    color: #1875E8; /* Cor do texto no modal */
-    font-size: 24px;
-    font-weight: 700;
-}
-
-#btn-fechar-modal {
-    border-radius: 16px;
-    background: #6f6f70;
-    padding: 12px 24px;
-    font-size: 24px;
-    width: 100%;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    color: white;
-    margin-top: 10px;
-}
-
-#btn-fechar-modal:hover {
-    background: #5c5c5c;
-}
-
-/* Estilo para o sorteio automático */
-#btn-iniciar-sorteio,
-#btn-parar-sorteio {
-    background-color: #4CAF50; /* Verde */
-}
-
-#btn-iniciar-sorteio:hover,
-#btn-parar-sorteio:hover {
-    background-color: #45a049;
-}
-
-#btn-parar-sorteio {
-    background-color: #f44336; /* Vermelho */
-}
-
-#btn-parar-sorteio:hover {
-    background-color: #e53935;
-}
-
 /* Estilos para o histórico */
 #historico {
     margin-top: 20px;
@@ -257,5 +193,24 @@ button:disabled {
 }
 
 #btn-excluir-historico:hover {
+    background-color: #e53935;
+}
+
+/* Estilos para o sorteio automático */
+#btn-iniciar-sorteio,
+#btn-parar-sorteio {
+    background-color: #4CAF50; /* Verde */
+}
+
+#btn-iniciar-sorteio:hover,
+#btn-parar-sorteio:hover {
+    background-color: #45a049;
+}
+
+#btn-parar-sorteio {
+    background-color: #f44336; /* Vermelho */
+}
+
+#btn-parar-sorteio:hover {
     background-color: #e53935;
 }

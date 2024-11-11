@@ -5,7 +5,7 @@ function sortear() {
 
     // Gera e exibe os números sorteados
     const sorteados = gerarNumerosSorteados(quantidade, de, ate);
-    exibirResultadoModal(sorteados);
+    console.log("Números sorteados:", sorteados);  // Log para depuração
 
     // Exibe mensagem de sucesso e atualiza o estado do botão de reiniciar
     exibirMensagem('Sorteio realizado com sucesso!');
@@ -13,6 +13,9 @@ function sortear() {
 
     // Salva o sorteio no histórico
     salvarHistorico(sorteados);
+
+    // Exibe os números sorteados no campo de resultado
+    document.getElementById('resultado').innerHTML = `<label class="texto__paragrafo">Números sorteados: ${sorteados.join(', ')}</label>`;
 }
 
 // Função que obtém e valida os valores de entrada
@@ -43,19 +46,6 @@ function gerarNumerosSorteados(quantidade, de, ate) {
 // Função que gera um número aleatório entre um mínimo e um máximo
 function obterNumeroAleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// Função para exibir os números sorteados no Modal
-function exibirResultadoModal(sorteados) {
-    const modal = document.getElementById('modalResultado');
-    const modalConteudo = document.getElementById('modalConteudo');
-    modalConteudo.innerHTML = `Números sorteados: <strong>${sorteados.join(', ')}</strong>`;
-    modal.style.display = 'block'; // Exibe o modal
-}
-
-// Função para fechar o modal
-function fecharModal() {
-    document.getElementById('modalResultado').style.display = 'none';
 }
 
 // Função para alterar o estado do botão de reiniciar (habilita/desabilita)
@@ -150,4 +140,3 @@ document.getElementById('de').addEventListener('input', desabilitarBotaoSortear)
 document.getElementById('ate').addEventListener('input', desabilitarBotaoSortear);
 document.getElementById('btn-iniciar-sorteio').addEventListener('click', iniciarSorteioAutomatico);
 document.getElementById('btn-parar-sorteio').addEventListener('click', pararSorteioAutomatico);
-document.getElementById('btn-fechar-modal').addEventListener('click', fecharModal);
