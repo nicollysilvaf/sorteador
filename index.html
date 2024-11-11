@@ -18,41 +18,68 @@
                 <div class="container__texto">
                     <h1>Sorteador<span class="container__texto-azul"> de números</span></h1>
                     <p id="mensagem" class="texto__paragrafo"></p>
-                    <p id="mensagem" class="texto__paragrafo"></p>
+
+                    <!-- Formulário de Entrada -->
                     <div class="container__campo">
                         <label class="texto__paragrafo">Quantidade de números</label>
                         <input class="container__input" id="quantidade" type="number" min="1">
                     </div>
-                    
+
                     <div class="container__campo">
                         <label class="texto__paragrafo">Do número</label>
                         <input class="container__input" id="de" type="number" min="1">
                     </div>
-                    
+
                     <div class="container__campo">
                         <label class="texto__paragrafo">Até o número</label>
                         <input class="container__input" id="ate" type="number" min="1">
                     </div>
                 </div>
-                
+
+                <!-- Botões principais -->
                 <div class="chute container__botoes">
                     <button onclick="sortear()" id="btn-sortear" class="container__botao">Sortear</button>
                     <button onclick="reiniciar()" id="btn-reiniciar" class="container__botao-desabilitado">Reiniciar</button>
                 </div>
 
+                <!-- Resultado do sorteio -->
                 <div class="container__texto" id="resultado">
                     <label class="texto__paragrafo">Números sorteados: nenhum até agora</label>
                 </div>
 
-              <!-- Botão para exibir o histórico -->
-              <button id="btn-exibir-historico" class="container__botao texto__paragrafo">Exibir Histórico</button>
+                <!-- Botão para exibir o histórico -->
+                <button id="btn-exibir-historico" class="container__botao texto__paragrafo">Exibir Histórico</button>
 
-              <!-- Área para mostrar o histórico -->
-              <div id="historico" class="texto__paragrafo__2"></div>
+                <!-- Área para mostrar o histórico -->
+                <div id="historico" class="texto__paragrafo__2"></div>
+
+                <!-- Novos Botões -->
+                <div class="chute container__botoes">
+                    <!-- Botão para exportar o histórico -->
+                    <button id="btn-exportar-historico" class="container__botao texto__paragrafo">Exportar Histórico</button>
+
+                    <!-- Botão para excluir o histórico -->
+                    <button id="btn-excluir-historico" class="container__botao texto__paragrafo">Excluir Histórico</button>
+                </div>
+
+                <!-- Botões para sorteio automático -->
+                <div class="chute container__botoes">
+                    <button id="btn-iniciar-sorteio" class="container__botao texto__paragrafo">Iniciar Sorteio Automático</button>
+                    <button id="btn-parar-sorteio" class="container__botao texto__paragrafo">Parar Sorteio Automático</button>
+                </div>
             </div>
 
+            <!-- Imagem decorativa -->
             <img src="./img/ia.png" alt="Uma pessoa com capacete de astronauta" class="container__imagem-pessoa" />
         </div>
+    </div>
+
+    <!-- Modal de Resultados -->
+    <div id="modalResultado" class="modal">
+        <div class="modal-content" id="modalConteudo">
+            <!-- O conteúdo do sorteio será exibido aqui -->
+        </div>
+        <button id="btn-fechar-modal" class="container__botao texto__paragrafo">Fechar</button>
     </div>
 
     <script src="app.js" defer></script>
