@@ -1,10 +1,10 @@
 // Função principal que realiza o sorteio de números
 function sortear() {
-    const { quantidade, de, ate } = obterValoresEntradas();
+    let { quantidade, de, ate } = obterValoresEntradas();
     if (!quantidade) return; // Interrompe a execução em caso de erro
 
     // Gera e exibe os números sorteados
-    const sorteados = gerarNumerosSorteados(quantidade, de, ate);
+    let sorteados = gerarNumerosSorteados(quantidade, de, ate);
     console.log("Números sorteados:", sorteados);  // Log para depuração
 
     // Exibe mensagem de sucesso e atualiza o estado do botão de reiniciar
@@ -36,7 +36,7 @@ function obterValoresEntradas() {
 
 // Função que gera números sorteados únicos
 function gerarNumerosSorteados(quantidade, de, ate) {
-    const sorteados = new Set();
+    let sorteados = new Set();
     while (sorteados.size < quantidade) {
         sorteados.add(obterNumeroAleatorio(de, ate));
     }
@@ -50,21 +50,21 @@ function obterNumeroAleatorio(min, max) {
 
 // Função para alterar o estado do botão de reiniciar (habilita/desabilita)
 function alterarStatusBotao() {
-    const botao = document.getElementById('btn-reiniciar');
+    let botao = document.getElementById('btn-reiniciar');
     botao.classList.toggle('container__botao');
     botao.classList.toggle('container__botao-desabilitado');
 }
 
 // Função para desabilitar o botão "Sortear" quando a quantidade for 0 ou inválida
 function desabilitarBotaoSortear() {
-    const botao = document.getElementById('btn-sortear');
-    const quantidade = parseInt(document.getElementById('quantidade').value);
+    let botao = document.getElementById('btn-sortear');
+    let quantidade = parseInt(document.getElementById('quantidade').value);
     botao.disabled = isNaN(quantidade) || quantidade < 1;
 }
 
 // Função para exibir mensagens de erro ou informação
 function exibirMensagem(mensagem) {
-    const mensagemElemento = document.getElementById('mensagem');
+    let mensagemElemento = document.getElementById('mensagem');
     mensagemElemento.innerHTML = mensagem;
     setTimeout(() => mensagemElemento.innerHTML = '', 3000); // Limpa a mensagem após 3 segundos
 }
@@ -83,15 +83,15 @@ function limparCampos(...ids) {
 
 // Função para salvar o histórico de sorteios
 function salvarHistorico(sorteados) {
-    const historico = JSON.parse(localStorage.getItem('historico')) || [];
+    let historico = JSON.parse(localStorage.getItem('historico')) || [];
     historico.push(sorteados);
     localStorage.setItem('historico', JSON.stringify(historico));
 }
 
 // Função para exibir o histórico de sorteios
 function exibirHistorico() {
-    const historico = JSON.parse(localStorage.getItem('historico')) || [];
-    const resultado = document.getElementById('historico');
+    let historico = JSON.parse(localStorage.getItem('historico')) || [];
+    let resultado = document.getElementById('historico');
     resultado.innerHTML = historico.map((sorteios, index) => 
         `<p>Sorteio ${index + 1}: ${sorteios.join(', ')}</p>`
     ).join('');
@@ -107,14 +107,14 @@ function excluirHistorico() {
 
 // Função para exportar o histórico para CSV
 function exportarHistoricoCSV() {
-    const historico = JSON.parse(localStorage.getItem('historico')) || [];
+    let historico = JSON.parse(localStorage.getItem('historico')) || [];
     let csvContent = 'Sorteio, Números Sorteados\n';
     historico.forEach((sorteio, index) => {
         csvContent += `${index + 1}, ${sorteio.join(', ')}\n`;
     });
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const link = document.createElement('a');
+    let blob = new Blob([csvContent], { type: 'text/csv' });
+    let link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'historico_sorteios.csv';
     link.click();
